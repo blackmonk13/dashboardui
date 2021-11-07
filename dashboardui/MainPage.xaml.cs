@@ -40,10 +40,6 @@ namespace dashboardui
         }
     }
 
-    public static class Dash
-    {
-        public static string Lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit Impedit qui quos assumenda incidunt perferendis harum earum non fugit doloremque amet voluptate dolores possimus at labore corrupti Neque suscipit! Accusantium exercitationem?";
-    }
 
     public class Contact
     {
