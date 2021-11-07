@@ -4,11 +4,170 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:dashboardui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:muxc="using:Windows.UI.Xaml.Controls" 
+    xmlns:controls="using:dashboardui.Controls" 
+    xmlns:tkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    RequestedTheme="Dark">
 
     <Grid>
+        <muxc:NavigationView 
+            x:Name="navmenu"
+            IsSettingsVisible="True"
+            IsBackButtonVisible="Collapsed"
+            AlwaysShowHeader="True"
+            PaneDisplayMode="Left"
+            ExpandedModeThresholdWidth="500"
+            SelectionFollowsFocus="Disabled"
+            IsTabStop="False">
+
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Content="Home" Tag="HomePage" x:Name="homenav" Icon="Home"/>
+                <muxc:NavigationViewItem Content="Account" Tag="AccountPage" x:Name="accountnav" SelectsOnInvoked="True" Icon="Contact"/>
+                <muxc:NavigationViewItem x:Name="inboxnav" Content="Inbox" Icon="Mail"/>
+            </muxc:NavigationView.MenuItems>
+
+            <muxc:NavigationView.PaneCustomContent>
+                <HyperlinkButton x:Name="PaneHyperlink" Content="More info" Margin="12,0" Visibility="Collapsed" />
+            </muxc:NavigationView.PaneCustomContent>
+
+            <muxc:NavigationView.AutoSuggestBox>
+                <AutoSuggestBox QueryIcon="Find" AutomationProperties.Name="Search" />
+            </muxc:NavigationView.AutoSuggestBox>
+
+            <muxc:NavigationView.Header>
+                <Grid Padding="10,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button HorizontalAlignment="Right" Margin="15,0,15,0" MinWidth="32" MinHeight="32" CornerRadius="15" Click="Button_Click">
+                        <SymbolIcon Symbol="Sync"/>
+                    </Button>
+                    <muxc:DropDownButton HorizontalAlignment="Right" CornerRadius="20" Grid.Column="1">
+                        <muxc:DropDownButton.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <PersonPicture DisplayName="{x:Bind contact.Name}" VerticalAlignment="Center" MaxWidth="32" MaxHeight="32"/>
+                                <TextBlock Text="{x:Bind contact.Name}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </muxc:DropDownButton.Content>
+                        <muxc:DropDownButton.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutItem Text="{x:Bind contact.PhoneNumber}">
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem Text="{x:Bind contact.Position}">
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </muxc:DropDownButton.Flyout>
+
+                    </muxc:DropDownButton>
+                </Grid>
+            </muxc:NavigationView.Header>
+
+            <muxc:NavigationView.PaneFooter>
+                <StackPanel x:Name="FooterStackPanel" Orientation="Vertical" Visibility="Collapsed">
+                    <muxc:NavigationViewItem Icon="Download" AutomationProperties.Name="download" />
+                    <muxc:NavigationViewItem Icon="Favorite" AutomationProperties.Name="favorite" />
+                </StackPanel>
+            </muxc:NavigationView.PaneFooter>
+
+            <Frame x:Name="contentFrame">
+                <Grid Padding="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition MinWidth="300" Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <tkit:HeaderedContentControl>
+                        <tkit:HeaderedContentControl.Header>
+                            <Grid Padding="50, 10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Sort by" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="15,0,15,0" FontWeight="Medium" FontSize="16"/>
+                                <muxc:DropDownButton VerticalAlignment="Center" HorizontalAlignment="Right" CornerRadius="15" Grid.Column="1" MinHeight="32">
+                                    <muxc:DropDownButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Relevance" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="16" FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </muxc:DropDownButton.Content>
+                                    <muxc:DropDownButton.Flyout>
+                                        <MenuFlyout Placement="Bottom">
+                                            <MenuFlyoutItem Text="Name">
+                                            </MenuFlyoutItem>
+                                            <MenuFlyoutItem Text="Tags">
+                                            </MenuFlyoutItem>
+                                        </MenuFlyout>
+                                    </muxc:DropDownButton.Flyout>
+
+                                </muxc:DropDownButton>
+                            </Grid>
+                        </tkit:HeaderedContentControl.Header>
+                        <GridView x:Name="influencergv">
+
+                        
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Margin" Value="5, 5, 5, 5"/>
+                            </Style>
+                        </GridView.ItemContainerStyle>
+
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                           MaximumRowsOrColumns="3"
+                           Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <controls:ActorGridItem/>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                    </tkit:HeaderedContentControl>
+                    
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <tkit:HeaderedContentControl>
+                            <tkit:HeaderedContentControl.Header>
+                                <TextBlock Text="Recent Searches" FontWeight="Medium" Margin="10,5,10,20" FontSize="16"/>
+                            </tkit:HeaderedContentControl.Header>
+                            <ListView x:Name="recentLV">
+                            
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Margin" Value="5, 5, 5, 5"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:ActorListItem/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        </tkit:HeaderedContentControl>
+                        
+                        <tkit:HeaderedContentControl Grid.Row="1" Margin="10">
+                            <tkit:HeaderedContentControl.Header>
+                                <TextBlock Text="Popular Profile" Margin="0,20" FontWeight="Medium" FontSize="16"/>
+                            </tkit:HeaderedContentControl.Header>
+                            <controls:ActorGridItem/>
+                        </tkit:HeaderedContentControl>
+                    </Grid>
+                </Grid>
+            </Frame>
+
+        </muxc:NavigationView>
 
     </Grid>
 </Page>
