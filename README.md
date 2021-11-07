@@ -4,4 +4,4 @@ A Simple Dashboard user interface in UWP and .NET Core.
 
 ## Screenshots
 
-![screenshot](/dashboardui.mp4)
+![screenshot](https://github.com/blackmonk13/dashboardui/blob/master/dashboardui.mp4)
